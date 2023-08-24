@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { FreeCounter } from '@/components/FreeCounter';
 import {
   CodeIcon,
   ImageIcon,
@@ -60,8 +61,11 @@ const routes = [
     href: '/settings',
   },
 ];
+interface SidebarProps {
+  apiLimitCount: number;
+}
 
-const Sidebar = () => {
+const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
   const pathname = usePathname();
 
   return (
@@ -95,6 +99,7 @@ const Sidebar = () => {
           ))}
         </div>
       </div>
+      <FreeCounter apiLimitCount={apiLimitCount} />
     </div>
   );
 };

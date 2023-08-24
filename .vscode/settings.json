@@ -12,5 +12,6 @@
       "source.fixAll": true
     }
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "css.lint.unknownAtRules": "ignore"
 }
