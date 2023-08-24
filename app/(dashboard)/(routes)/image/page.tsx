@@ -1,7 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { DownloadIcon, ImageIcon } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import axios from 'axios';
+
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -12,17 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Card, CardFooter } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+
 import Heading from '@/components/Heading';
 import { Empty } from '@/components/Empty';
 import { Loader } from '@/components/Loader';
-import { ImageIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { amountOptions, formSchema, resolutionOptions } from './constants';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 
-import axios from 'axios';
+import { amountOptions, formSchema, resolutionOptions } from './constants';
 
 const ImagePage = () => {
   const router = useRouter();
@@ -43,12 +47,11 @@ const ImagePage = () => {
     try {
       setImages([]);
 
-      console.log('LOG::   values:', values);
-      // const response = await axios.post('/api/image', values);
+      const response = await axios.post('/api/image', values);
 
-      // const urls = response.data.map((image: { url: string }) => image.url);
+      const urls = response.data.map((image: { url: string }) => image.url);
 
-      // setImages(urls);
+      setImages(urls);
 
       form.reset();
     } catch (error) {
@@ -168,7 +171,28 @@ const ImagePage = () => {
           {images.length === 0 && !isLoading && (
             <Empty label={'No images generated.'} />
           )}
-          <div>Images will be here!</div>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
+          xl:grid-cols-4 gap-4 mt-8"
+          >
+            {images.map(src => (
+              <Card key={src} className="rounded-lg overflow-hidden">
+                <div className="relative aspect-square">
+                  <Image alt={'Image'} src={src} fill />
+                </div>
+                <CardFooter className="p-2">
+                  <Button
+                    variant={'secondary'}
+                    className="w-full"
+                    onClick={() => window.open(src)}
+                  >
+                    <DownloadIcon className="h-4 w-4 mr-2" />
+                    Download
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </div>
