@@ -19,8 +19,10 @@ import { OpenAI } from 'openai';
 import axios from 'axios';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
+import { useProModal } from '@/hooks/useProModal';
 
 const CodePage = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const [messages, setMessages] = useState<
     OpenAI.Chat.Completions.CreateChatCompletionRequestMessage[]
@@ -48,9 +50,10 @@ const CodePage = () => {
       setMessages(prev => [...prev, userMessage, response.data]);
 
       form.reset();
-    } catch (error) {
-      // Todo: Open Pro Modal
-      console.log('LOG::   error:', error);
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }

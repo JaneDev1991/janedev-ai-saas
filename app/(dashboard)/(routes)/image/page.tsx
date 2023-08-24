@@ -27,8 +27,10 @@ import { Empty } from '@/components/Empty';
 import { Loader } from '@/components/Loader';
 
 import { amountOptions, formSchema, resolutionOptions } from './constants';
+import { useProModal } from '@/hooks/useProModal';
 
 const ImagePage = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const [images, setImages] = useState<string[]>([]);
 
@@ -54,9 +56,10 @@ const ImagePage = () => {
       setImages(urls);
 
       form.reset();
-    } catch (error) {
-      // Todo: Open Pro Modal
-      console.log('LOG::   error:', error);
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }

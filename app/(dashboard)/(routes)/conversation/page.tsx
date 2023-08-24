@@ -9,6 +9,7 @@ import { Empty } from '@/components/Empty';
 import { Loader } from '@/components/Loader';
 import { UserAvatar } from '@/components/UserAvatar';
 import { BotAvatar } from '@/components/BotAvatar';
+import { useProModal } from '@/hooks/useProModal';
 import { MessageSquare } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { formSchema } from './constants';
@@ -20,6 +21,7 @@ import axios from 'axios';
 import { cn } from '@/lib/utils';
 
 const ConversationPage = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const [messages, setMessages] = useState<
     OpenAI.Chat.Completions.CreateChatCompletionRequestMessage[]
@@ -47,9 +49,10 @@ const ConversationPage = () => {
       setMessages(prev => [...prev, userMessage, response.data]);
 
       form.reset();
-    } catch (error) {
-      // Todo: Open Pro Modal
-      console.log('LOG::   error:', error);
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }

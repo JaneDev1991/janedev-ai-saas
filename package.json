@@ -42,6 +42,7 @@
     "tailwindcss-animate": "^1.0.6",
     "typescript": "5.1.6",
     "yarn": "^1.22.19",
-    "zod": "^3.22.2"
+    "zod": "^3.22.2",
+    "zustand": "^4.4.1"
   }
 }
