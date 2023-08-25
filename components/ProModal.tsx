@@ -17,6 +17,7 @@ import { tools } from '@/constants';
 import { cn } from '@/lib/utils';
 import { Check, Zap } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 export const ProModal = () => {
   const proModal = useProModal();
@@ -29,7 +30,7 @@ export const ProModal = () => {
 
       window.location.href = response.data.url;
     } catch (error) {
-      console.log(error, 'STRIP_CLIENT_ERROR');
+      toast.error('Something went wrong');
     } finally {
       setLoading(false);
     }
